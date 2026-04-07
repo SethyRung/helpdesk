@@ -20,7 +20,7 @@ function onTicketCreated(ticket: Ticket) {
 }
 
 function onSelect(_e: Event, row: TableRow<Ticket>) {
-  router.push({ name: "ticket-details", params: { id: row.id } });
+  router.push({ name: "ticket-details", params: { id: row.original.id } });
 }
 
 const tickets = ref<Ticket[]>([]);
