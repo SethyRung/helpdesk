@@ -153,6 +153,8 @@ public class AuthServiceImpl implements AuthService {
         return new UserInfo(
                 payload.get("preferred_username").asText(),
                 payload.get("email").asText(),
+                payload.get("given_name").asText(),
+                payload.get("family_name").asText(),
                 roles
         );
     }

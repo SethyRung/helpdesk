@@ -1,6 +1,7 @@
 package com.sethy.service.ticket.controller;
 
 import com.sethy.service.common.api_response.ApiResponse;
+import com.sethy.service.common.util.JwtUtil;
 import com.sethy.service.ticket.dto.CreateTicketRequest;
 import com.sethy.service.ticket.dto.TicketResponse;
 import com.sethy.service.ticket.dto.UpdateStatusRequest;
@@ -65,8 +66,11 @@ public class TicketController {
     public ResponseEntity<ApiResponse<TicketResponse>> createTicket(
             @Valid @RequestBody CreateTicketRequest request,
             Authentication authentication) {
-        String username = authentication.getName();
-        TicketResponse ticket = ticketService.createTicket(request, username);
+        String username = JwtUtil.extractUsername(authentication);
+        String email = JwtUtil.extractEmail(authentication);
+        String firstName = JwtUtil.extractFirstName(authentication);
+        String lastName = JwtUtil.extractLastName(authentication);
+        TicketResponse ticket = ticketService.createTicket(request, username, email, firstName, lastName);
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(ticket, "Ticket created successfully"));
     }
 

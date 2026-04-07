@@ -31,6 +31,15 @@ public class Ticket {
     @Column(nullable = false, updatable = false)
     private String createdBy;
 
+    @Column(updatable = false)
+    private String createdByEmail;
+
+    @Column(updatable = false)
+    private String createdByFirstName;
+
+    @Column(updatable = false)
+    private String createdByLastName;
+
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
@@ -41,6 +50,10 @@ public class Ticket {
     protected void onCreate() {
         createdAt = LocalDateTime.now();
         updatedAt = LocalDateTime.now();
+        // Set default values for user fields if not provided
+        if (createdByEmail == null) createdByEmail = "";
+        if (createdByFirstName == null) createdByFirstName = "";
+        if (createdByLastName == null) createdByLastName = "";
     }
 
     @PreUpdate
@@ -94,6 +107,30 @@ public class Ticket {
 
     public void setCreatedBy(String createdBy) {
         this.createdBy = createdBy;
+    }
+
+    public String getCreatedByEmail() {
+        return createdByEmail;
+    }
+
+    public void setCreatedByEmail(String createdByEmail) {
+        this.createdByEmail = createdByEmail;
+    }
+
+    public String getCreatedByFirstName() {
+        return createdByFirstName;
+    }
+
+    public void setCreatedByFirstName(String createdByFirstName) {
+        this.createdByFirstName = createdByFirstName;
+    }
+
+    public String getCreatedByLastName() {
+        return createdByLastName;
+    }
+
+    public void setCreatedByLastName(String createdByLastName) {
+        this.createdByLastName = createdByLastName;
     }
 
     public LocalDateTime getCreatedAt() {

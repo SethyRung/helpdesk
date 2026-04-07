@@ -42,7 +42,7 @@ const statusColor = computed(() =>
 
 const canComment = computed(() => {
   if (!ticket.value || !authStore.user) return false;
-  return authStore.isAdmin || ticket.value.createdBy === authStore.user.username;
+  return authStore.isAdmin || ticket.value.createdBy.username === authStore.user.username;
 });
 
 const canEditComment = (comment: Comment) => {
@@ -336,8 +336,13 @@ onMounted(() => {
             <div>
               <p class="text-xs text-muted uppercase mb-1">Opened by</p>
               <div class="flex items-center gap-2">
-                <UAvatar :text="ticket.createdBy[0]" size="xs" />
-                <p class="text-sm">{{ ticket.createdBy }}</p>
+                <UAvatar :text="ticket.createdBy.username[0]" size="xs" />
+                <div>
+                  <p class="text-sm">{{ ticket.createdBy.firstName && ticket.createdBy.lastName
+                    ? `${ticket.createdBy.firstName} ${ticket.createdBy.lastName}`
+                    : ticket.createdBy.username }}</p>
+                  <p v-if="ticket.createdBy.email" class="text-xs text-muted">{{ ticket.createdBy.email }}</p>
+                </div>
               </div>
             </div>
 

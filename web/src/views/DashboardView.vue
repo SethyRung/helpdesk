@@ -11,6 +11,7 @@ import { getPriorityColor, getStatusColor } from "@/utils/color";
 import { formatFullDate } from "@/utils/date";
 
 const UBadge = resolveComponent("UBadge");
+const UAvatar = resolveComponent("UAvatar");
 
 const router = useRouter();
 const loading = ref(true);
@@ -97,8 +98,17 @@ const columns = computed<TableColumn<Ticket>[]>(() => [
     cell: ({ row }) => h("span", { class: "line-clamp-1" }, row.original.description ?? ""),
   },
   {
-    accessorKey: "createdBy",
+    id: "createdBy",
     header: "Created By",
+    cell: ({ row }) => {
+      const user = row.original.createdBy;
+      const displayName =
+        user.firstName && user.lastName ? `${user.firstName} ${user.lastName}` : user.username;
+      return h("div", { class: "flex items-center gap-2" }, [
+        h(UAvatar, { text: displayName[0], size: "xs" }),
+        h("span", { class: "text-sm" }, displayName),
+      ]);
+    },
   },
   {
     accessorKey: "priority",

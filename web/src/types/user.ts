@@ -6,5 +6,7 @@ export enum Role {
 export interface AuthUser {
   username: string;
   email: string;
+  firstName?: string;
+  lastName?: string;
   roles: (Role | string)[];
 }

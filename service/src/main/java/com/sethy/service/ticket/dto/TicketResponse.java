@@ -25,8 +25,8 @@ public class TicketResponse {
     @Schema(description = "Current status of the ticket", example = "OPEN")
     private TicketStatus status;
 
-    @Schema(description = "Username of the user who created the ticket", example = "john.doe")
-    private String createdBy;
+    @Schema(description = "Information about the user who created the ticket")
+    private UserSummary createdBy;
 
     @Schema(description = "Timestamp when the ticket was created", example = "2025-01-15T10:30:00")
     private LocalDateTime createdAt;
@@ -41,7 +41,14 @@ public class TicketResponse {
         response.setDescription(ticket.getDescription());
         response.setPriority(ticket.getPriority());
         response.setStatus(ticket.getStatus());
-        response.setCreatedBy(ticket.getCreatedBy());
+
+        UserSummary creator = new UserSummary();
+        creator.setUsername(ticket.getCreatedBy());
+        creator.setEmail(ticket.getCreatedByEmail());
+        creator.setFirstName(ticket.getCreatedByFirstName());
+        creator.setLastName(ticket.getCreatedByLastName());
+        response.setCreatedBy(creator);
+
         response.setCreatedAt(ticket.getCreatedAt());
         response.setUpdatedAt(ticket.getUpdatedAt());
         return response;
@@ -87,11 +94,11 @@ public class TicketResponse {
         this.status = status;
     }
 
-    public String getCreatedBy() {
+    public UserSummary getCreatedBy() {
         return createdBy;
     }
 
-    public void setCreatedBy(String createdBy) {
+    public void setCreatedBy(UserSummary createdBy) {
         this.createdBy = createdBy;
     }
 

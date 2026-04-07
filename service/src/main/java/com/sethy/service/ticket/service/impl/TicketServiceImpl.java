@@ -26,12 +26,15 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    public TicketResponse createTicket(CreateTicketRequest request, String username) {
+    public TicketResponse createTicket(CreateTicketRequest request, String username, String email, String firstName, String lastName) {
         Ticket ticket = new Ticket();
         ticket.setTitle(request.getTitle());
         ticket.setDescription(request.getDescription());
         ticket.setPriority(request.getPriority());
         ticket.setCreatedBy(username);
+        ticket.setCreatedByEmail(email != null ? email : "");
+        ticket.setCreatedByFirstName(firstName != null ? firstName : "");
+        ticket.setCreatedByLastName(lastName != null ? lastName : "");
 
         Ticket savedTicket = ticketRepository.save(ticket);
         return TicketResponse.fromEntity(savedTicket);

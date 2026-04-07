@@ -10,5 +10,7 @@ import java.util.List;
 public class UserInfo {
     private String username;
     private String email;
+    private String firstName;
+    private String lastName;
     private List<String> roles;
 }
