@@ -1,17 +1,19 @@
 <script setup lang="ts">
-import { computed, h, ref, resolveComponent } from "vue";
+import { computed, h, onMounted, ref, resolveComponent } from "vue";
 import { useRouter } from "vue-router";
 
 import type { TableColumn, TableRow } from "@nuxt/ui";
 import type { Ticket } from "@/types/ticket";
 
 import CreateTicketModal from "@/components/CreateTicketModal.vue";
+import { ticketService } from "@/services/ticket.service";
 import { getPriorityColor, getStatusColor } from "@/utils/color";
 import { formatFullDate } from "@/utils/date";
 
 const UBadge = resolveComponent("UBadge");
 
 const router = useRouter();
+const loading = ref(true);
 
 function onTicketCreated(ticket: Ticket) {
   tickets.value.unshift(ticket);
@@ -21,49 +23,23 @@ function onSelect(_e: Event, row: TableRow<Ticket>) {
   router.push({ name: "ticket-details", params: { id: row.id } });
 }
 
-// TODO: Replace with actual API call to fetch user's tickets
-const tickets = ref<Ticket[]>([
-  {
-    id: 19,
-    title: "DFS Issue",
-    description: "Doesn't allow admin to add...",
-    createdBy: "Bijay Shrestha",
-    priority: "HIGH",
-    status: "OPEN",
-    createdAt: "2024-03-19T10:30:00",
-    updatedAt: "2024-03-19T10:30:00",
-  },
-  {
-    id: 20,
-    title: "Login Error",
-    description: "The admin is unable to create...",
-    createdBy: "Julia Basnet",
-    priority: "MEDIUM",
-    status: "IN_PROGRESS",
-    createdAt: "2024-03-19T09:15:00",
-    updatedAt: "2024-03-19T11:20:00",
-  },
-  {
-    id: 18,
-    title: "Network Issue",
-    description: "Connection timeout error...",
-    createdBy: "Ram Bahadur",
-    priority: "LOW",
-    status: "RESOLVED",
-    createdAt: "2024-03-18T14:00:00",
-    updatedAt: "2024-03-18T16:30:00",
-  },
-  {
-    id: 17,
-    title: "Database Error",
-    description: "Query execution failed...",
-    createdBy: "Sita Sharma",
-    priority: "URGENT",
-    status: "OPEN",
-    createdAt: "2024-03-18T08:45:00",
-    updatedAt: "2024-03-18T08:45:00",
-  },
-]);
+const tickets = ref<Ticket[]>([]);
+
+async function fetchMyTickets() {
+  try {
+    loading.value = true;
+    const res = await ticketService.getMyTickets();
+    tickets.value = res.data;
+  } catch (error) {
+    console.error("Failed to fetch tickets:", error);
+  } finally {
+    loading.value = false;
+  }
+}
+
+onMounted(() => {
+  fetchMyTickets();
+});
 
 const columns = computed<TableColumn<Ticket>[]>(() => [
   {
@@ -135,6 +111,7 @@ const columns = computed<TableColumn<Ticket>[]>(() => [
         sticky="header"
         @select="onSelect"
         :ui="{ tbody: 'cursor-pointer' }"
+        :loading="loading"
       />
     </UCard>
   </div>

@@ -1,17 +1,19 @@
 <script setup lang="ts">
-import { computed, h, ref, resolveComponent } from "vue";
+import { computed, h, onMounted, ref, resolveComponent } from "vue";
 import { useRouter } from "vue-router";
 
 import type { TableColumn, TableRow } from "@nuxt/ui";
 import type { Ticket } from "@/types/ticket";
 
 import CreateTicketModal from "@/components/CreateTicketModal.vue";
+import { ticketService } from "@/services/ticket.service";
 import { getPriorityColor, getStatusColor } from "@/utils/color";
 import { formatFullDate } from "@/utils/date";
 
 const UBadge = resolveComponent("UBadge");
 
 const router = useRouter();
+const loading = ref(true);
 
 function onTicketCreated(ticket: Ticket) {
   tickets.value.unshift(ticket);
@@ -21,49 +23,7 @@ function onSelect(_e: Event, row: TableRow<Ticket>) {
   router.push({ name: "ticket-details", params: { id: row.id } });
 }
 
-// TODO: Replace with actual API call to fetch user's tickets
-const tickets = ref<Ticket[]>([
-  {
-    id: 19,
-    title: "DFS Issue",
-    description: "Doesn't allow admin to add...",
-    createdBy: "Bijay Shrestha",
-    priority: "HIGH",
-    status: "OPEN",
-    createdAt: "2024-03-19T10:30:00",
-    updatedAt: "2024-03-19T10:30:00",
-  },
-  {
-    id: 20,
-    title: "Login Error",
-    description: "The admin is unable to create...",
-    createdBy: "Julia Basnet",
-    priority: "MEDIUM",
-    status: "IN_PROGRESS",
-    createdAt: "2024-03-19T09:15:00",
-    updatedAt: "2024-03-19T11:20:00",
-  },
-  {
-    id: 18,
-    title: "Network Issue",
-    description: "Connection timeout error...",
-    createdBy: "Ram Bahadur",
-    priority: "LOW",
-    status: "RESOLVED",
-    createdAt: "2024-03-18T14:00:00",
-    updatedAt: "2024-03-18T16:30:00",
-  },
-  {
-    id: 17,
-    title: "Database Error",
-    description: "Query execution failed...",
-    createdBy: "Sita Sharma",
-    priority: "URGENT",
-    status: "OPEN",
-    createdAt: "2024-03-18T08:45:00",
-    updatedAt: "2024-03-18T08:45:00",
-  },
-]);
+const tickets = ref<Ticket[]>([]);
 
 const statCards = computed<
   {
@@ -72,32 +32,55 @@ const statCards = computed<
     icon: string;
     color: "primary" | "info" | "warning" | "success";
   }[]
->(() => [
-  {
-    label: "Total Tickets",
-    value: "156",
-    icon: "i-lucide-ticket",
-    color: "primary",
-  },
-  {
-    label: "Open Tickets",
-    value: "48",
-    icon: "i-lucide-inbox",
-    color: "info",
-  },
-  {
-    label: "In Progress",
-    value: "23",
-    icon: "i-lucide-timer",
-    color: "warning",
-  },
-  {
-    label: "Resolved",
-    value: "85",
-    icon: "i-lucide-check-circle",
-    color: "success",
-  },
-]);
+>(() => {
+  const total = tickets.value.length;
+  const open = tickets.value.filter((t) => t.status === "OPEN").length;
+  const inProgress = tickets.value.filter((t) => t.status === "IN_PROGRESS").length;
+  const resolved = tickets.value.filter((t) => t.status === "RESOLVED").length;
+
+  return [
+    {
+      label: "Total Tickets",
+      value: String(total),
+      icon: "i-lucide-ticket",
+      color: "primary",
+    },
+    {
+      label: "Open Tickets",
+      value: String(open),
+      icon: "i-lucide-inbox",
+      color: "info",
+    },
+    {
+      label: "In Progress",
+      value: String(inProgress),
+      icon: "i-lucide-timer",
+      color: "warning",
+    },
+    {
+      label: "Resolved",
+      value: String(resolved),
+      icon: "i-lucide-check-circle",
+      color: "success",
+    },
+  ];
+});
+
+async function fetchTickets() {
+  try {
+    loading.value = true;
+    const res = await ticketService.getAllTickets();
+    tickets.value = res.data;
+  } catch (error) {
+    console.error("Failed to fetch tickets:", error);
+  } finally {
+    loading.value = false;
+  }
+}
+
+onMounted(() => {
+  fetchTickets();
+});
 
 const columns = computed<TableColumn<Ticket>[]>(() => [
   {
@@ -189,12 +172,6 @@ const columns = computed<TableColumn<Ticket>[]>(() => [
           <CreateTicketModal @created="onTicketCreated">
             <UButton label="Create Ticket" icon="i-lucide-plus" color="primary" />
           </CreateTicketModal>
-          <UButton
-            label="View All"
-            trailing-icon="i-lucide-arrow-right"
-            variant="ghost"
-            color="neutral"
-          />
         </div>
       </div>
 
@@ -205,6 +182,7 @@ const columns = computed<TableColumn<Ticket>[]>(() => [
           sticky="header"
           @select="onSelect"
           :ui="{ tbody: 'cursor-pointer' }"
+          :loading="loading"
         />
       </UCard>
     </div>
