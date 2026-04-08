@@ -12,6 +12,8 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.server.resource.web.BearerTokenResolver;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
@@ -27,6 +29,10 @@ public class SecurityConfig {
 
     @Value("${spring.cors.allowed-origins}")
     private String corsAllowedOrigins;
+    @Value("${spring.keycloak.internal-base-url}")
+    private String keycloakInternalBaseUrl;
+    @Value("${spring.keycloak.realm}") 
+    private String realm;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -76,6 +82,12 @@ public class SecurityConfig {
     @Bean
     public CustomJwtAuthenticationConverter customJwtAuthenticationConverter() {
         return new CustomJwtAuthenticationConverter();
+    }
+
+    @Bean
+    public JwtDecoder jwtDecoder() {
+        String jwkSetUri = keycloakInternalBaseUrl + "/realms/" + realm + "/protocol/openid-connect/certs";
+        return NimbusJwtDecoder.withJwkSetUri(jwkSetUri).build();
     }
 
     @Bean

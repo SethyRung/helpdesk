@@ -26,6 +26,8 @@ import java.util.List;
 public class AuthServiceImpl implements AuthService {
     @Value("${spring.keycloak.base-url}")
     private String keycloakBaseUrl;
+    @Value("${spring.keycloak.internal-base-url}")
+    private String keycloakInternalBaseUrl;
     @Value("${spring.keycloak.realm}")
     private String realm;
     @Value("${spring.keycloak.client-id}")
@@ -47,7 +49,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     public Tokens exchangeCodeForTokens(String code) throws Exception {
-        String tokenUrl = keycloakBaseUrl + "/realms/" + realm + "/protocol/openid-connect/token";
+        String tokenUrl = keycloakInternalBaseUrl + "/realms/" + realm + "/protocol/openid-connect/token";
 
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
@@ -79,7 +81,7 @@ public class AuthServiceImpl implements AuthService {
 
         if (refreshToken == null) throw new RuntimeException("No refresh token");
 
-        String tokenUrl = keycloakBaseUrl + "/realms/" + realm + "/protocol/openid-connect/token";
+        String tokenUrl = keycloakInternalBaseUrl + "/realms/" + realm + "/protocol/openid-connect/token";
 
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "refresh_token");
@@ -112,7 +114,7 @@ public class AuthServiceImpl implements AuthService {
             throw new RuntimeException("No refresh token");
         }
 
-        String logoutUrl = keycloakBaseUrl + "/realms/" + realm + "/protocol/openid-connect/logout";
+        String logoutUrl = keycloakInternalBaseUrl + "/realms/" + realm + "/protocol/openid-connect/logout";
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("client_id", clientId);
         body.add("refresh_token", refreshToken);

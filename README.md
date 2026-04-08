@@ -389,24 +389,25 @@ const response = await api.post<TicketResponse>("/tickets", data);
 
 ## Environment Variables
 
-| Variable                     | Description               | Default               |
-| ---------------------------- | ------------------------- | --------------------- |
-| POSTGRES_USER                | PostgreSQL user           | postgres              |
-| POSTGRES_PASSWORD            | PostgreSQL password       | postgres              |
-| KC_HOSTNAME_PORT             | Keycloak port             | 8080                  |
-| KC_BOOTSTRAP_ADMIN_USERNAME  | Keycloak admin username   | admin                 |
-| KC_BOOTSTRAP_ADMIN_PASSWORD  | Keycloak admin password   | admin                 |
-| SERVER_PORT                  | API port                  | 8000                  |
-| SPRING_DATASOURCE_URL        | JDBC URL                  | jdbc:postgresql://... |
-| SPRING_DATASOURCE_USERNAME   | Database user             | helpdesk              |
-| SPRING_DATASOURCE_PASSWORD   | Database password         | helpdesk              |
-| SPRING_WEB_BASE_URL          | Frontend URL              | http://localhost:5173 |
-| SPRING_CORS_ALLOWED_ORIGINS  | CORS allowed origins      | localhost:5173,8080   |
-| SPRING_KEYCLOAK_BASE_URL     | Keycloak URL              | http://localhost:8080 |
-| SPRING_KEYCLOAK_REALM        | Keycloak realm name       | helpdesk              |
-| SPRING_KEYCLOAK_CLIENT_ID    | Keycloak client ID        | helpdesk-client       |
-| SPRING_KEYCLOAK_REDIRECT_URL | OAuth2 callback URL       | http://localhost:...  |
-| VITE_API_BASE_URL            | API base URL for frontend | http://localhost:8000 |
+| Variable                          | Description               | Default                                                        |
+| --------------------------------- | ------------------------- | -------------------------------------------------------------- |
+| POSTGRES_USER                     | PostgreSQL user           | postgres                                                       |
+| POSTGRES_PASSWORD                 | PostgreSQL password       | postgres                                                       |
+| KC_HOSTNAME_PORT                  | Keycloak port             | 8080                                                           |
+| KC_BOOTSTRAP_ADMIN_USERNAME       | Keycloak admin username   | admin                                                          |
+| KC_BOOTSTRAP_ADMIN_PASSWORD       | Keycloak admin password   | admin                                                          |
+| SERVER_PORT                       | API port                  | 8000                                                           |
+| SPRING_DATASOURCE_URL             | JDBC URL                  | jdbc:postgresql://...                                          |
+| SPRING_DATASOURCE_USERNAME        | Database user             | helpdesk                                                       |
+| SPRING_DATASOURCE_PASSWORD        | Database password         | helpdesk                                                       |
+| SPRING_WEB_BASE_URL               | Frontend URL              | http://localhost:5173                                          |
+| SPRING_CORS_ALLOWED_ORIGINS       | CORS allowed origins      | localhost:5173,8080                                            |
+| SPRING_KEYCLOAK_BASE_URL          | Public Keycloak URL       | http://localhost:8080                                          |
+| SPRING_KEYCLOAK_INTERNAL_BASE_URL | Internal Keycloak URL     | (local) http://localhost:8080 or (docker) http://keycloak:8080 |
+| SPRING_KEYCLOAK_REALM             | Keycloak realm name       | helpdesk                                                       |
+| SPRING_KEYCLOAK_CLIENT_ID         | Keycloak client ID        | helpdesk-client                                                |
+| SPRING_KEYCLOAK_REDIRECT_URL      | OAuth2 callback URL       | http://localhost:...                                           |
+| VITE_API_BASE_URL                 | API base URL for frontend | http://localhost:8000                                          |
 
 ## Troubleshooting
 
@@ -428,6 +429,7 @@ const response = await api.post<TicketResponse>("/tickets", data);
 1. Check API is running: `curl http://localhost:8000/api/ping`
 2. Verify `VITE_API_BASE_URL` in `.env`
 3. Check CORS configuration: `SPRING_CORS_ALLOWED_ORIGINS`
+4. If running in Docker, confirm the API container has `SPRING_KEYCLOAK_INTERNAL_BASE_URL=http://keycloak:8080` and `SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/auth_platform`
 
 ### Keycloak theme not showing
 

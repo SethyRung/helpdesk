@@ -27,11 +27,6 @@ spring:
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: ${SPRING_KEYCLOAK_BASE_URL}/realms/${SPRING_KEYCLOAK_REALM}
   cors:
     allowed-origins: ${SPRING_CORS_ALLOWED_ORIGINS}
 
@@ -40,6 +35,7 @@ spring:
 
   keycloak:
     base-url: ${SPRING_KEYCLOAK_BASE_URL}
+    internal-base-url: ${SPRING_KEYCLOAK_INTERNAL_BASE_URL:${SPRING_KEYCLOAK_BASE_URL}}
     realm: ${SPRING_KEYCLOAK_REALM}
     client-id: ${SPRING_KEYCLOAK_CLIENT_ID}
     redirect-url: ${SPRING_KEYCLOAK_REDIRECT_URL}
