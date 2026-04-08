@@ -5,25 +5,22 @@ const props = defineProps<{
   kcData: KeycloakData;
 }>();
 
-const errorTitle = props.kcData.errors.title || "An error occurred";
-const errorDescription =
-  props.kcData.errors.description || "Something went wrong. Please try again.";
+const message = props.kcData.errors.message as string | undefined | null;
 </script>
 
 <template>
   <UCard class="w-full max-w-md">
     <template #header>
-      <div class="flex items-center gap-2">
-        <UIcon name="i-lucide-alert-circle" :size="20" class="text-red-500" />
-
-        <h1 class="text-xl font-semibold">{{ errorTitle }}</h1>
-      </div>
-      <p class="mt-2 text-toned">{{ errorDescription }}</p>
+      <h1 class="text-xl font-semibold">An unexpected error occurred.</h1>
     </template>
 
     <div class="space-y-4">
+      <p v-if="message" class="text-sm text-toned">
+        {{ message }}
+      </p>
+
       <p class="text-sm text-toned">
-        If you continue to experience issues, please contact support or try again later.
+        If you continue to experience issues, please contact support.
       </p>
 
       <a :href="kcData.urls.loginUrl" class="block">

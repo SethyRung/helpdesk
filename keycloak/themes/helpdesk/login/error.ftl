@@ -14,8 +14,7 @@
         },
         errors: {
           hasError: true,
-          title: <#if message?has_content>"${message.summary?js_string}"<#else>null</#if>,
-          description: <#if message?has_content && message.description?has_content>"${message.description?js_string}"<#else>null</#if>
+          message: <#if message?has_content && message.summary?has_content>"${message.summary?js_string}"<#elseif message?has_content && message.description?has_content>"${message.description?js_string}"<#else>"Something went wrong. Please try again."</#if>,
         },
         urls: {
           loginUrl: "${url.loginUrl?js_string}"

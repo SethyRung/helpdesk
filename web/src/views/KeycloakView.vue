@@ -206,15 +206,15 @@ const items = computed<NavigationMenuItem[]>(() => [
         },
         meta: {},
         messages: {
-          backToLogin: "Back to login",
+          backToLogin: "« Back to Login",
         },
         errors: {
           hasError: true,
-          title: "Access Denied",
-          description: "You do not have permission to access this resource.",
+          message: "Failed to send email, please try again later.",
         },
         urls: {
-          loginUrl: "/realms/helpdesk/login-actions/authenticate?client_id=helpdesk-client",
+          loginUrl:
+            "/realms/helpdesk/login-actions/authenticate?client_id=helpdesk-client&amp;tab_id=ZOq1hmcMYRA&amp;client_data=eyJydSI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9hcGkvYXV0aC9jYWxsYmFjayIsInJ0IjoiY29kZSJ9",
         },
       };
     },
