@@ -14,6 +14,10 @@ import { formatDate, formatFullDate } from "@/utils/date";
 import { useAuthStore } from "@/stores/auth";
 
 import Editor from "@/components/editor/Editor.vue";
+import EditTicketModal from "@/components/EditTicketModal.vue";
+import ChangeStatusModal from "@/components/ChangeStatusModal.vue";
+import DeleteCommentModal from "@/components/DeleteCommentModal.vue";
+import DeleteTicketModal from "@/components/DeleteTicketModal.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -27,8 +31,10 @@ const editingCommentContent = ref("");
 const loading = ref(false);
 const loadingComments = ref(false);
 const submittingComment = ref(false);
-const deleteModalOpen = ref(false);
-const commentToDelete = ref<number | null>(null);
+
+const deleteCommentModalOpen = ref(false);
+const commentToDeleteId = ref<number | null>(null);
+
 const toast = useToast();
 
 const ticketId = computed(() => Number(route.params.id));
@@ -43,6 +49,19 @@ const statusColor = computed(() =>
 const canComment = computed(() => {
   if (!ticket.value || !authStore.user) return false;
   return authStore.isAdmin || ticket.value.createdBy.username === authStore.user.username;
+});
+
+const canEditTicket = computed(() => {
+  if (!ticket.value || !authStore.user) return false;
+  return authStore.isAdmin || ticket.value.createdBy.username === authStore.user.username;
+});
+
+const canDeleteTicket = computed(() => {
+  return authStore.isAdmin;
+});
+
+const canEditStatus = computed(() => {
+  return authStore.isAdmin;
 });
 
 const canEditComment = (comment: Comment) => {
@@ -143,34 +162,17 @@ async function saveComment(comment: Comment) {
   }
 }
 
-function openDeleteModal(commentId: number) {
-  commentToDelete.value = commentId;
-  deleteModalOpen.value = true;
+function openDeleteCommentModal(commentId: number) {
+  commentToDeleteId.value = commentId;
+  deleteCommentModalOpen.value = true;
 }
 
-async function confirmDeleteComment() {
-  if (!commentToDelete.value) return;
+function onCommentDeleted(commentId: number) {
+  comments.value = comments.value.filter((c) => c.id !== commentId);
+}
 
-  try {
-    await commentService.deleteComment(ticketId.value, commentToDelete.value);
-    comments.value = comments.value.filter((c) => c.id !== commentToDelete.value);
-    toast.add({
-      title: "Comment deleted",
-      description: "The comment has been successfully deleted.",
-      color: "success",
-      icon: "i-lucide-circle-check",
-    });
-    deleteModalOpen.value = false;
-    commentToDelete.value = null;
-  } catch (error) {
-    console.error("Failed to delete comment:", error);
-    toast.add({
-      title: "Error",
-      description: "Failed to delete comment. Please try again.",
-      color: "error",
-      icon: "i-lucide-alert-circle",
-    });
-  }
+function onTicketUpdated(updatedTicket: Ticket) {
+  ticket.value = updatedTicket;
 }
 
 onMounted(() => {
@@ -193,10 +195,23 @@ onMounted(() => {
       <div class="lg:col-span-2 space-y-6">
         <UCard>
           <template #header>
-            <div class="flex items-start justify-between">
+            <div class="flex items-start justify-between gap-4">
               <div class="flex items-center gap-2">
                 <UIcon name="i-lucide-ticket" class="size-5 text-muted" />
                 <h1 class="text-2xl font-bold">{{ ticket.title }}</h1>
+              </div>
+              <div class="flex items-center gap-2">
+                <EditTicketModal v-if="canEditTicket" :ticket="ticket" @updated="onTicketUpdated">
+                  <UButton icon="i-lucide-pencil" label="Edit" variant="soft" />
+                </EditTicketModal>
+
+                <DeleteTicketModal
+                  v-if="canDeleteTicket"
+                  :ticket-id="ticket.id"
+                  @deleted="() => router.push({ name: 'tickets' })"
+                >
+                  <UButton icon="i-lucide-trash" label="Delete" color="error" variant="soft" />
+                </DeleteTicketModal>
               </div>
             </div>
           </template>
@@ -229,7 +244,7 @@ onMounted(() => {
               >
                 <div class="flex items-start justify-between gap-2">
                   <div class="flex items-center gap-2">
-                    <UAvatar :text="comment.author[0]" size="sm" />
+                    <UAvatar :text="comment.author[0]" />
                     <div>
                       <p class="text-sm font-medium">{{ comment.author }}</p>
                       <p class="text-xs text-muted">{{ formatDate(comment.createdAt) }}</p>
@@ -251,7 +266,7 @@ onMounted(() => {
                           label: 'Delete',
                           icon: 'i-lucide-trash',
                           color: 'error',
-                          onSelect: () => openDeleteModal(comment.id),
+                          onSelect: () => openDeleteCommentModal(comment.id),
                         },
                       ],
                     ]"
@@ -272,13 +287,8 @@ onMounted(() => {
                     class="min-h-24"
                   />
                   <div class="flex gap-2">
-                    <UButton label="Save" size="sm" @click="saveComment(comment)" />
-                    <UButton
-                      label="Cancel"
-                      variant="ghost"
-                      size="sm"
-                      @click="cancelEditingComment"
-                    />
+                    <UButton label="Save" @click="saveComment(comment)" />
+                    <UButton label="Cancel" variant="ghost" @click="cancelEditingComment" />
                   </div>
                 </div>
 
@@ -324,7 +334,12 @@ onMounted(() => {
       <div class="space-y-4">
         <UCard>
           <template #header>
-            <h2 class="text-lg font-semibold">Details</h2>
+            <div class="flex items-center justify-between">
+              <h2 class="text-lg font-semibold">Details</h2>
+              <ChangeStatusModal v-if="canEditStatus" :ticket="ticket" @updated="onTicketUpdated">
+                <UButton icon="i-lucide-refresh-cw" label="Change Status" variant="soft" />
+              </ChangeStatusModal>
+            </div>
           </template>
 
           <div class="space-y-4">
@@ -338,10 +353,16 @@ onMounted(() => {
               <div class="flex items-center gap-2">
                 <UAvatar :text="ticket.createdBy.username[0]" size="xs" />
                 <div>
-                  <p class="text-sm">{{ ticket.createdBy.firstName && ticket.createdBy.lastName
-                    ? `${ticket.createdBy.firstName} ${ticket.createdBy.lastName}`
-                    : ticket.createdBy.username }}</p>
-                  <p v-if="ticket.createdBy.email" class="text-xs text-muted">{{ ticket.createdBy.email }}</p>
+                  <p class="text-sm">
+                    {{
+                      ticket.createdBy.firstName && ticket.createdBy.lastName
+                        ? `${ticket.createdBy.firstName} ${ticket.createdBy.lastName}`
+                        : ticket.createdBy.username
+                    }}
+                  </p>
+                  <p v-if="ticket.createdBy.email" class="text-xs text-muted">
+                    {{ ticket.createdBy.email }}
+                  </p>
                 </div>
               </div>
             </div>
@@ -365,18 +386,12 @@ onMounted(() => {
       </div>
     </div>
 
-    <UModal
-      v-model:open="deleteModalOpen"
-      title="Delete Comment"
-      description="Are you sure you want to delete this comment? This action cannot be undone."
-      :ui="{
-        footer: 'flex items-center justify-between',
-      }"
-    >
-      <template #footer>
-        <UButton label="Cancel" color="neutral" variant="ghost" @click="deleteModalOpen = false" />
-        <UButton label="Delete" color="error" icon="i-lucide-trash" @click="confirmDeleteComment" />
-      </template>
-    </UModal>
+    <DeleteCommentModal
+      v-if="commentToDeleteId"
+      v-model:open="deleteCommentModalOpen"
+      :ticket-id="ticketId"
+      :comment-id="commentToDeleteId"
+      @deleted="onCommentDeleted"
+    />
   </div>
 </template>

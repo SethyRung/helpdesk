@@ -6,7 +6,8 @@ const props = defineProps<{
 }>();
 
 const errorTitle = props.kcData.errors.title || "An error occurred";
-const errorDescription = props.kcData.errors.description || "Something went wrong. Please try again.";
+const errorDescription =
+  props.kcData.errors.description || "Something went wrong. Please try again.";
 </script>
 
 <template>
@@ -25,10 +26,7 @@ const errorDescription = props.kcData.errors.description || "Something went wron
         If you continue to experience issues, please contact support or try again later.
       </p>
 
-      <a
-        :href="kcData.urls.loginUrl"
-        class="block"
-      >
+      <a :href="kcData.urls.loginUrl" class="block">
         <UButton label="Back to login" size="xl" block />
       </a>
     </div>

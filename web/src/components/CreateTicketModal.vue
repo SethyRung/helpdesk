@@ -1,4 +1,5 @@
 <script lang="ts">
+import type { Ticket } from "@/types/ticket";
 interface CreateTicketModalEmits {
   created: [Ticket];
 }
@@ -7,8 +8,9 @@ interface CreateTicketModalEmits {
 <script setup lang="ts">
 import { ref } from "vue";
 import { ticketService } from "@/services/ticket.service";
-import type { CreateTicketRequest, Ticket, TicketPriority } from "@/types/ticket";
+import type { CreateTicketRequest } from "@/types/ticket";
 import { ApiResponseCode } from "@/types";
+import { priorityOptions } from "@/constants/ticket";
 
 const emits = defineEmits<CreateTicketModalEmits>();
 
@@ -19,13 +21,6 @@ const newTicket = ref<CreateTicketRequest>({
   description: "",
   priority: "MEDIUM",
 });
-
-const priorityOptions: { label: string; value: TicketPriority }[] = [
-  { label: "Low", value: "LOW" },
-  { label: "Medium", value: "MEDIUM" },
-  { label: "High", value: "HIGH" },
-  { label: "Urgent", value: "URGENT" },
-];
 
 async function createTicket(cb: () => void) {
   try {

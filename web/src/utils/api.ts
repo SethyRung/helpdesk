@@ -27,13 +27,9 @@ client.interceptors.response.use(
     ) {
       requestConfig._retry = true;
       try {
-        const refreshResponse = await client.post<ApiResponse<string>>(
-          "/auth/refresh",
-          undefined,
-          {
-            skipAuthRefresh: true,
-          } as AxiosRequestConfig,
-        );
+        const refreshResponse = await client.post<ApiResponse<string>>("/auth/refresh", undefined, {
+          skipAuthRefresh: true,
+        } as AxiosRequestConfig);
 
         if (refreshResponse.data.status.code !== ApiResponseCode.Success) {
           throw new Error(response.data.status.message);
@@ -58,11 +54,7 @@ export const api = {
     return res.data;
   },
 
-  post: async <T>(
-    path: string,
-    body?: unknown,
-    config?: AxiosRequestConfig,
-  ) => {
+  post: async <T>(path: string, body?: unknown, config?: AxiosRequestConfig) => {
     const res = await client.post<ApiResponse<T>>(path, body, config);
     return res.data;
   },
@@ -72,11 +64,7 @@ export const api = {
     return res.data;
   },
 
-  patch: async <T>(
-    path: string,
-    body?: unknown,
-    config?: AxiosRequestConfig,
-  ) => {
+  patch: async <T>(path: string, body?: unknown, config?: AxiosRequestConfig) => {
     const res = await client.patch<ApiResponse<T>>(path, body, config);
     return res.data;
   },

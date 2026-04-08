@@ -25,8 +25,7 @@ export const useAuthStore = defineStore("auth", () => {
         return false;
       }
 
-      if (res.status.code !== ApiResponseCode.Success)
-        throw new Error(res.status.message);
+      if (res.status.code !== ApiResponseCode.Success) throw new Error(res.status.message);
 
       authenticated.value = res.data === true;
       return authenticated.value;
@@ -47,8 +46,7 @@ export const useAuthStore = defineStore("auth", () => {
 
       const res = await api.get<AuthUser>("/auth/me");
 
-      if (res.status.code !== ApiResponseCode.Success)
-        throw new Error(res.status.message);
+      if (res.status.code !== ApiResponseCode.Success) throw new Error(res.status.message);
 
       user.value = res.data;
     } catch {
@@ -61,8 +59,7 @@ export const useAuthStore = defineStore("auth", () => {
     try {
       const res = await api.post<AuthUser>("/auth/logout");
 
-      if (res.status.code !== ApiResponseCode.Success)
-        throw new Error(res.status.message);
+      if (res.status.code !== ApiResponseCode.Success) throw new Error(res.status.message);
 
       user.value = null;
       login();
