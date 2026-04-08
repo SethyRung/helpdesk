@@ -67,11 +67,11 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    public TicketResponse updateTicketAsUser(Long id, UpdateTicketRequest request, String username) {
+    public TicketResponse updateTicketAsUser(Long id, UpdateTicketRequest request, String username, boolean isAdmin) {
         Ticket ticket = findTicketByIdOrThrow(id);
 
-        // Verify ownership
-        if (!ticket.getCreatedBy().equals(username)) {
+        // Verify ownership (admin can bypass this check)
+        if (!isAdmin && !ticket.getCreatedBy().equals(username)) {
             throw new IllegalArgumentException("You can only update your own tickets");
         }
 

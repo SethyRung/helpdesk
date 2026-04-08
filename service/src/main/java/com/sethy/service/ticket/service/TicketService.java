@@ -17,7 +17,7 @@ public interface TicketService {
 
     List<TicketResponse> getMyTickets(String username);
 
-    TicketResponse updateTicketAsUser(Long id, UpdateTicketRequest request, String username);
+    TicketResponse updateTicketAsUser(Long id, UpdateTicketRequest request, String username, boolean isAdmin);
 
     TicketResponse updateTicketAsAdmin(Long id, UpdateTicketRequest request);
 

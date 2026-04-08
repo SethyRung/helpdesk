@@ -43,7 +43,7 @@ public class TicketController {
             description = "Retrieve tickets created by the authenticated user."
     )
     public ResponseEntity<ApiResponse<List<TicketResponse>>> getMyTickets(Authentication authentication) {
-        String username = authentication.getName();
+        String username = JwtUtil.extractUsername(authentication);
         List<TicketResponse> tickets = ticketService.getMyTickets(username);
         return ResponseEntity.ok(ApiResponse.success(tickets));
     }
@@ -88,15 +88,17 @@ public class TicketController {
 
     @PatchMapping("/{id}")
     @Operation(
-            description = "Update own ticket with title, description, priority. Cannot update status. Owner only."
+            description = "Update own ticket with title, description, priority. Cannot update status. Owner only (admin can update any ticket)."
     )
     public ResponseEntity<ApiResponse<TicketResponse>> updateTicketAsUser(
             @Parameter(description = "Ticket ID", required = true)
             @PathVariable Long id,
             @RequestBody UpdateTicketRequest request,
             Authentication authentication) {
-        String username = authentication.getName();
-        TicketResponse ticket = ticketService.updateTicketAsUser(id, request, username);
+        String username = JwtUtil.extractUsername(authentication);
+        boolean isAdmin = authentication.getAuthorities().stream()
+                .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
+        TicketResponse ticket = ticketService.updateTicketAsUser(id, request, username, isAdmin);
         return ResponseEntity.ok(ApiResponse.success(ticket, "Ticket updated successfully"));
     }
 

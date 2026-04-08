@@ -1,6 +1,7 @@
 package com.sethy.service.comment.controller;
 
 import com.sethy.service.common.api_response.ApiResponse;
+import com.sethy.service.common.util.JwtUtil;
 import com.sethy.service.comment.dto.CommentResponse;
 import com.sethy.service.comment.dto.CreateCommentRequest;
 import com.sethy.service.comment.dto.UpdateCommentRequest;
@@ -35,7 +36,7 @@ public class CommentController {
             @Parameter(description = "Ticket ID", required = true)
             @PathVariable Long ticketId,
             Authentication authentication) {
-        String username = authentication.getName();
+        String username = JwtUtil.extractUsername(authentication);
         List<CommentResponse> comments = commentService.getCommentsForTicket(ticketId, username);
         return ResponseEntity.ok(ApiResponse.success(comments));
     }
@@ -49,7 +50,7 @@ public class CommentController {
             @PathVariable Long ticketId,
             @Valid @RequestBody CreateCommentRequest request,
             Authentication authentication) {
-        String username = authentication.getName();
+        String username = JwtUtil.extractUsername(authentication);
         CommentResponse comment = commentService.createComment(ticketId, request, username);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.success(comment, "Comment created successfully"));
@@ -66,7 +67,7 @@ public class CommentController {
             @PathVariable Long commentId,
             @Valid @RequestBody UpdateCommentRequest request,
             Authentication authentication) {
-        String username = authentication.getName();
+        String username = JwtUtil.extractUsername(authentication);
         CommentResponse comment = commentService.updateComment(ticketId, commentId, request, username);
         return ResponseEntity.ok(ApiResponse.success(comment, "Comment updated successfully"));
     }
@@ -81,7 +82,7 @@ public class CommentController {
             @Parameter(description = "Comment ID", required = true)
             @PathVariable Long commentId,
             Authentication authentication) {
-        String username = authentication.getName();
+        String username = JwtUtil.extractUsername(authentication);
         commentService.deleteComment(ticketId, commentId, username);
         return ResponseEntity.ok(ApiResponse.success(null, "Comment deleted successfully"));
     }
