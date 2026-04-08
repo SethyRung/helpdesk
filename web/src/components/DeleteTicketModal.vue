@@ -10,13 +10,11 @@ interface DeleteTicketModalEmits {
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { useRouter } from "vue-router";
 import { ticketService } from "@/services/ticket.service";
 
 const props = defineProps<DeleteTicketModalProps>();
 const emits = defineEmits<DeleteTicketModalEmits>();
 
-const router = useRouter();
 const toast = useToast();
 const submitting = ref(false);
 
@@ -33,7 +31,6 @@ async function deleteTicket(cb: () => void) {
       icon: "i-lucide-check",
     });
     cb();
-    router.push({ name: "tickets" });
   } catch (err: any) {
     toast.add({
       title: "Could not delete ticket",

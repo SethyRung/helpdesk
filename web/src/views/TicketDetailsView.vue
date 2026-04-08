@@ -173,6 +173,7 @@ function onCommentDeleted(commentId: number) {
 
 function onTicketUpdated(updatedTicket: Ticket) {
   ticket.value = updatedTicket;
+  router.back();
 }
 
 onMounted(() => {
