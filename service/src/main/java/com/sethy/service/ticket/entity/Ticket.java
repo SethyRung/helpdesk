@@ -3,11 +3,13 @@ package com.sethy.service.ticket.entity;
 import com.sethy.service.ticket.model.TicketPriority;
 import com.sethy.service.ticket.model.TicketStatus;
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "tickets")
+@Data
 public class Ticket {
 
     @Id
@@ -59,93 +61,5 @@ public class Ticket {
     @PreUpdate
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public TicketPriority getPriority() {
-        return priority;
-    }
-
-    public void setPriority(TicketPriority priority) {
-        this.priority = priority;
-    }
-
-    public TicketStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(TicketStatus status) {
-        this.status = status;
-    }
-
-    public String getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    public String getCreatedByEmail() {
-        return createdByEmail;
-    }
-
-    public void setCreatedByEmail(String createdByEmail) {
-        this.createdByEmail = createdByEmail;
-    }
-
-    public String getCreatedByFirstName() {
-        return createdByFirstName;
-    }
-
-    public void setCreatedByFirstName(String createdByFirstName) {
-        this.createdByFirstName = createdByFirstName;
-    }
-
-    public String getCreatedByLastName() {
-        return createdByLastName;
-    }
-
-    public void setCreatedByLastName(String createdByLastName) {
-        this.createdByLastName = createdByLastName;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
     }
 }

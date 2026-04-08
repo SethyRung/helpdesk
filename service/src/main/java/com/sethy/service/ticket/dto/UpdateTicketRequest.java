@@ -2,7 +2,9 @@ package com.sethy.service.ticket.dto;
 
 import com.sethy.service.ticket.model.TicketPriority;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
 
+@Data
 @Schema(description = "Request object for updating a ticket (users can update title, description, priority)")
 public class UpdateTicketRequest {
 
@@ -14,28 +16,4 @@ public class UpdateTicketRequest {
 
     @Schema(description = "Priority level of the ticket", example = "HIGH")
     private TicketPriority priority;
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public TicketPriority getPriority() {
-        return priority;
-    }
-
-    public void setPriority(TicketPriority priority) {
-        this.priority = priority;
-    }
 }
