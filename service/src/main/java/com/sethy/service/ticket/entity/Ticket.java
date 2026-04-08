@@ -2,8 +2,13 @@ package com.sethy.service.ticket.entity;
 
 import com.sethy.service.ticket.model.TicketPriority;
 import com.sethy.service.ticket.model.TicketStatus;
+import com.sethy.service.comment.entity.Comment;
 import jakarta.persistence.*;
 import lombok.Data;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.ArrayList;
+import java.util.List;
 
 import java.time.LocalDateTime;
 
@@ -47,6 +52,10 @@ public class Ticket {
 
     @Column(nullable = false)
     private LocalDateTime updatedAt;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "ticket", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
 
     @PrePersist
     protected void onCreate() {
