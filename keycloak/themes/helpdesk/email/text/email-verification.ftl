@@ -1,7 +1,7 @@
 Verify Your Email Address
 ==========================
 
-Hello${user.attributes.givenName[0]!' '${user.attributes.familyName[0]!'!'},
+Hello<#if user?? && user.firstName??> ${user.firstName}</#if><#if user?? && user.lastName??> ${user.lastName}</#if>,
 
 Thank you for registering with ${realmName!'Helpdesk'}! To complete your registration, please verify your email address by clicking the link below:
 

@@ -13,16 +13,13 @@
             </td></tr>
             <tr><td class="email-body" style="padding: 40px 20px;">
                 <h1 class="heading" style="font-size: 24px;font-weight: 600;color: #111827;margin: 0 0 16px 0;">Verify Your Email Address</h1>
-                <p class="greeting" style="font-size: 16px;color: #374151;margin-bottom: 16px;">Hello<#if user?? && user.attributes.givenName??> ${user.attributes.givenName[0]!''}</#if>,</p>
+                <p class="greeting" style="font-size: 16px;color: #374151;margin-bottom: 16px;">Hello<#if user?? && user.firstName??> ${user.firstName}</#if>,</p>
                 <p class="message" style="font-size: 15px;line-height: 1.6;color: #4b5563;margin-bottom: 24px;">
                     Thank you for registering with <strong>${realmName!'Helpdesk'}</strong>! To complete your registration, please verify your email address.
                 </p>
                 <div class="button-container" style="text-align: center;margin: 32px 0;">
                     <a href="${link}" class="button-link" style="display: inline-block;padding: 14px 32px;background: #22c55e;color: #ffffff;text-decoration: none;border-radius: 8px;font-weight: 500;font-size: 15px;" target="_blank">Verify Email Address</a>
                 </div>
-                <p class="message" style="font-size: 14px;color: #4b5563;">
-                    Or copy this link: <a href="${link}" style="color: #22c55e;">${link}</a>
-                </p>
                 <div class="info-box" style="background: #f9fafb;border-left: 4px solid #f59e0b;padding: 16px;margin: 24px 0;border-radius: 4px;">
                     <p class="info-box-text" style="font-size: 14px;color: #92400e;margin: 0;">
                         <strong>This link will expire in ${linkExpirationHours!'24'} hours.</strong><br>If you didn't create an account, please ignore this email.
