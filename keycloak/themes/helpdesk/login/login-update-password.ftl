@@ -21,7 +21,8 @@
         },
         urls: {
           updatePasswordAction: "${url.loginAction?js_string}"
-        }
+        },
+        resourcePath: "${url.resourcesPath}/vue/"
       };
     </script>
   </#if>

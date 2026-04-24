@@ -66,6 +66,7 @@ const items = computed<NavigationMenuItem[]>(() => [
           register:
             "/realms/helpdesk/login-actions/registration?client_id=helpdesk-client&amp;tab_id=9zmss7yK7lk&amp;client_data=eyJydSI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9hcGkvYXV0aC9jYWxsYmFjayIsInJ0IjoiY29kZSJ9",
         },
+        resourcePath: "",
       };
     },
   },
@@ -106,6 +107,7 @@ const items = computed<NavigationMenuItem[]>(() => [
           loginUrl:
             "/realms/helpdesk/login-actions/authenticate?client_id=helpdesk-client&amp;tab_id=GSCHUqYrKjk&amp;client_data=eyJydSI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9hcGkvYXV0aC9jYWxsYmFjayIsInJ0IjoiY29kZSJ9",
         },
+        resourcePath: "",
       };
     },
   },
@@ -135,6 +137,7 @@ const items = computed<NavigationMenuItem[]>(() => [
           loginUrl:
             "/realms/helpdesk/login-actions/authenticate?client_id=helpdesk-client&amp;tab_id=A28MaTAS_PU&amp;client_data=eyJydSI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9hcGkvYXV0aC9jYWxsYmFjayIsInJ0IjoiY29kZSJ9",
         },
+        resourcePath: "",
       };
     },
   },
@@ -163,6 +166,7 @@ const items = computed<NavigationMenuItem[]>(() => [
           updatePasswordAction:
             "http://localhost:8080/realms/helpdesk/login-actions/required-action?session_code=eNn30i7TavhC-SIlwiHAXKtGYeP5pvL1tQijE4R3mx4&amp;execution=UPDATE_PASSWORD&amp;client_id=helpdesk-client&amp;tab_id=CiyvFOerZYQ&amp;client_data=eyJydSI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9hcGkvYXV0aC9jYWxsYmFjayIsInJ0IjoiY29kZSJ9",
         },
+        resourcePath: "",
       };
     },
   },
@@ -191,6 +195,7 @@ const items = computed<NavigationMenuItem[]>(() => [
           loginUrl:
             "/realms/helpdesk/login-actions/authenticate?client_id=helpdesk-client&amp;tab_id=h2VGnFBfDaM&amp;client_data=eyJydSI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9hcGkvYXV0aC9jYWxsYmFjayIsInJ0IjoiY29kZSJ9",
         },
+        resourcePath: "",
       };
     },
   },
@@ -216,6 +221,7 @@ const items = computed<NavigationMenuItem[]>(() => [
           loginUrl:
             "/realms/helpdesk/login-actions/authenticate?client_id=helpdesk-client&amp;tab_id=ZOq1hmcMYRA&amp;client_data=eyJydSI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9hcGkvYXV0aC9jYWxsYmFjayIsInJ0IjoiY29kZSJ9",
         },
+        resourcePath: "",
       };
     },
   },

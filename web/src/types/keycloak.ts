@@ -13,6 +13,7 @@ export interface KeycloakData {
     [key: string]: unknown;
   };
   urls: Record<string, string>;
+  resourcePath: string;
 }
 
 declare global {

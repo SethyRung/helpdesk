@@ -70,6 +70,7 @@ function onSubmit(event: FormSubmitEvent<Schema>) {
         <UInput
           v-model="state.username"
           :placeholder="kcData.messages.username"
+          autocomplete="email"
           size="xl"
           class="w-full"
         />

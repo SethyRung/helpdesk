@@ -28,7 +28,8 @@
           loginAction: "${url.loginAction?js_string}",
           forgotPassword: "${url.loginResetCredentialsUrl?js_string}",
           register: "${url.registrationUrl?js_string}"
-        }
+        },
+        resourcePath: "${url.resourcesPath}/vue/"
       };
     </script>
   </#if>

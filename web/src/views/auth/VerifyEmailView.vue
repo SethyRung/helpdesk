@@ -108,6 +108,7 @@ onUnmounted(() => {
         <UInput
           v-model="state.userEmail"
           placeholder="your@email.com"
+          autocomplete="email"
           size="xl"
           type="email"
           class="w-full"

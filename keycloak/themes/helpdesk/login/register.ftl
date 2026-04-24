@@ -32,7 +32,8 @@
         urls: {
           registerAction: "${url.registrationAction?js_string}",
           loginUrl: "${url.loginUrl?js_string}"
-        }
+        },
+        resourcePath: "${url.resourcesPath}/vue/"
       };
     </script>
   </#if>
